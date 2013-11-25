@@ -4,4 +4,8 @@
     <string name="app_name">Demo Suite</string>
     <string name="title_demo_detail">Demo Detail</string>
 
+    <!-- NOTIFICATIONS -->
+    <string name="notification_title">Notifications</string>
+    <string name="notification_simple_button">Create simple notification</string>
+
 </resources>
