@@ -7,5 +7,8 @@
     <!-- NOTIFICATIONS -->
     <string name="notification_title">Notifications</string>
     <string name="notification_simple_button">Create simple notification</string>
+    <string name="title_activity_notification_result">NotificationResultActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

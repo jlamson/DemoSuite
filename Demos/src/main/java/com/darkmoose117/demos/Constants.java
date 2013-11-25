@@ -12,6 +12,9 @@ public interface Constants {
     public static final int DEMO_COUNT              = 1;
 
     // titles for demos
-    public static final String  NOTIFICATIONS_DEMO_TITLE    = "Notifications";
+    public static final String NOTIFICATIONS_DEMO_TITLE = "Notifications";
+
+    // Notification keys
+    public static final int SIMPLE_NOTIFICATION_ID = 0;
 
 }

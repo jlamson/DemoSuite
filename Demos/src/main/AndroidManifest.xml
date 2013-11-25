@@ -30,6 +30,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DemoListActivity" />
         </activity>
+        <activity
+            android:name="com.darkmoose117.demos.notifications.NotificationResultActivity"
+            android:label="@string/title_activity_notification_result" >
+        </activity>
     </application>
 
 </manifest>

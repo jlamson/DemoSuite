@@ -20,8 +20,6 @@ import com.darkmoose117.demos.R;
  */
 public class NotificationsDemoFragment extends Fragment implements Constants, View.OnClickListener {
 
-    private static final int SIMPLE_NOTIFICATION_ID = 0;
-
     private NotificationManager mNotificationManager;
 
     @Override
@@ -57,7 +55,11 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)
                 .setContentTitle("Sup yo")
-                .setContentText("This is a simple notification");
+                .setContentText("This is a simple notification")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentIntent(NotificationResultActivity.getNotificationIntent(
+                        getActivity(), "You got here from the Simple Notification"
+                ));
 
         mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
     }
