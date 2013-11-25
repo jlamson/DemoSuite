@@ -4,78 +4,43 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.darkmoose117.demos.dummy.DummyContent;
+import com.darkmoose117.demos.adapters.DemoAdapter;
+import com.darkmoose117.demos.interfaces.OnDemoSelected;
 
 /**
- * A list fragment representing a list of Demos. This fragment
- * also supports tablet devices by allowing list items to be given an
- * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link DemoDetailFragment}.
+ * A list fragment representing a list of Demos. This fragment also supports tablet devices by
+ * allowing list demos to be given an 'activated' state upon selection. This helps indicate which
+ * demo is currently being viewed in a fragment.
  * <p>
- * Activities containing this fragment MUST implement the {@link Callbacks}
- * interface.
+ * Activities containing this fragment MUST implement the
+ * {@link com.darkmoose117.demos.interfaces.OnDemoSelected} interface.
  */
 public class DemoListFragment extends ListFragment {
 
     /**
-     * The serialization (saved instance state) Bundle key representing the
-     * activated item position. Only used on tablets.
+     * The serialization (saved instance state) Bundle key representing the activated item position.
+     * Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
-    private Callbacks mCallbacks = sDummyCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
 
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public void onItemSelected(String id);
-    }
+    private OnDemoSelected mOnDemoSelected;
 
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id) {
-        }
-    };
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public DemoListFragment() {
+        // do nothing
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        setListAdapter(new DemoAdapter(getActivity()));
     }
 
     @Override
@@ -93,20 +58,11 @@ public class DemoListFragment extends ListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        // Activities containing this fragment must implement its callbacks.
-        if (!(activity instanceof Callbacks)) {
+        if (!(activity instanceof OnDemoSelected)) {
             throw new IllegalStateException("Activity must implement fragment's callbacks.");
         }
 
-        mCallbacks = (Callbacks) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+        mOnDemoSelected = (OnDemoSelected) activity;
     }
 
     @Override
@@ -115,7 +71,7 @@ public class DemoListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        if (mOnDemoSelected != null) mOnDemoSelected.onDemoSelected((int) id);
     }
 
     @Override
@@ -129,7 +85,7 @@ public class DemoListFragment extends ListFragment {
 
     /**
      * Turns on activate-on-click mode. When this mode is on, list items will be
-     * given the 'activated' state when touched.
+     * given the 'activated' state when touched. Used when in a tablet form.
      */
     public void setActivateOnItemClick(boolean activateOnItemClick) {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
