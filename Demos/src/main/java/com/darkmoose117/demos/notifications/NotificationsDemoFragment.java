@@ -57,6 +57,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setContentTitle("Sup yo")
                 .setContentText("This is a simple notification")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setAutoCancel(true)
                 .setContentIntent(NotificationResultActivity.getNotificationIntent(
                         getActivity(), "You got here from the Simple Notification"
                 ));
