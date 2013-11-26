@@ -24,6 +24,8 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     private NotificationManager mNotificationManager;
     private CheckBox mOngoingCheckbox;
 
+    private int mNotificationCount = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notifications_demo_fragment, container, false);
@@ -61,6 +63,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setSmallIcon(R.drawable.ic_stat_test)
                 .setContentTitle("Sup yo")
                 .setContentText("This is a simple notification")
+                .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(!ongoing)
                 .setOngoing(ongoing)
