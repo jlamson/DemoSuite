@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.darkmoose117.demos.Constants;
@@ -21,6 +22,7 @@ import com.darkmoose117.demos.R;
 public class NotificationsDemoFragment extends Fragment implements Constants, View.OnClickListener {
 
     private NotificationManager mNotificationManager;
+    private CheckBox mOngoingCheckbox;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
 
         Button simpleNotificationButton = (Button) view.findViewById(R.id.simple_notification_button);
         simpleNotificationButton.setOnClickListener(this);
+
+        mOngoingCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_notif_cb);
 
         return view;
     }
@@ -47,20 +51,26 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 showSimpleNotification();
                 break;
             default:
-                Toast.makeText(getActivity(), "not implemeneted yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "not implemented yet", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showSimpleNotification() {
+        boolean ongoing = mOngoingCheckbox.isChecked();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)
                 .setContentTitle("Sup yo")
                 .setContentText("This is a simple notification")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setAutoCancel(true)
+                .setAutoCancel(!ongoing)
+                .setOngoing(ongoing)
                 .setContentIntent(NotificationResultActivity.getNotificationIntent(
-                        getActivity(), "You got here from the Simple Notification"
+                        getActivity(),
+                        "You got here from the simple notification",
+                        ongoing
                 ));
+
+
 
         mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
     }

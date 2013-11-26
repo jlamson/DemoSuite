@@ -11,5 +11,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="notification_ongoing_cb">Make Notification on-going</string>
+    <string name="remove_ongoing_notification_button">remove ongoing notification</string>
 
 </resources>
