@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -21,8 +20,16 @@ import com.darkmoose117.demos.R;
  */
 public class NotificationsDemoFragment extends Fragment implements Constants, View.OnClickListener {
 
+    /*
+     *  TODO do a progress notification
+     *      http://developer.android.com/guide/topics/ui/notifiers/notifications.html#Progress
+     *  TODO do a big style notification
+     *      http://developer.android.com/guide/topics/ui/notifiers/notifications.html#CreateNotification
+     */
+
     private NotificationManager mNotificationManager;
     private CheckBox mOngoingCheckbox;
+    private CheckBox mProgressCheckbox;
 
     private int mNotificationCount = 0;
 
@@ -30,10 +37,11 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notifications_demo_fragment, container, false);
 
-        Button simpleNotificationButton = (Button) view.findViewById(R.id.simple_notification_button);
-        simpleNotificationButton.setOnClickListener(this);
+        view.findViewById(R.id.simple_notification_button).setOnClickListener(this);
+        mOngoingCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_simple_cb);
 
-        mOngoingCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_notif_cb);
+        view.findViewById(R.id.progress_notification_button).setOnClickListener(this);
+        mProgressCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_progress_cb);
 
         return view;
     }
@@ -72,9 +80,6 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                         "You got here from the simple notification",
                         ongoing
                 ));
-
-
-
         mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
     }
 }
