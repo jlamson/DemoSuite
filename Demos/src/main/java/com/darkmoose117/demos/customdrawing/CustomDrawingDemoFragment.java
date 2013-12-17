@@ -1,4 +1,4 @@
-package com.darkmoose117.demos.expandinglistitem;
+package com.darkmoose117.demos.customdrawing;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

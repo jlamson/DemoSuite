@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-import com.darkmoose117.demos.model.DemoUtils;
+import com.darkmoose117.demos.utils.DemoUtils;
 
 public class DemoDetailActivity extends FragmentActivity implements Constants {
 

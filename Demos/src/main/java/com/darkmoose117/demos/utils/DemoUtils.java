@@ -1,9 +1,10 @@
-package com.darkmoose117.demos.model;
+package com.darkmoose117.demos.utils;
 
 import android.support.v4.app.Fragment;
 
 import com.darkmoose117.demos.Constants;
-import com.darkmoose117.demos.expandinglistitem.CustomDrawingDemoFragment;
+import com.darkmoose117.demos.customdrawing.CustomDrawingDemoFragment;
+import com.darkmoose117.demos.model.Demo;
 import com.darkmoose117.demos.notifications.NotificationsDemoFragment;
 
 /**
