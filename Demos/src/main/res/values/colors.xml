@@ -13,4 +13,8 @@
     <color name="dark_yellow">#FF8800</color>
     <color name="red">#FF4444</color>
     <color name="dark_red">#CC0000</color>
+
+    <!-- Email Colors -->
+    <color name="subject_text_color">@color/black</color>
+
 </resources>
