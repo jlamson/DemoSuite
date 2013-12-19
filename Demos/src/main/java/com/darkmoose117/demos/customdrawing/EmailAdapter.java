@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.darkmoose117.demos.model.Email;
 
@@ -45,18 +44,14 @@ public class EmailAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView textView = getView(convertView, parent.getContext());
-        initView(textView, getItem(position));
+        EmailListItem emailView = getView(convertView, parent.getContext());
+        emailView.setEmail(getItem(position));
 
-        return textView;
+        return emailView;
     }
 
-    private void initView(TextView textView, Email email) {
-        textView.setText(email.subject);
-    }
-
-    private TextView getView(View convertView, Context context) {
-        if (convertView == null) return new TextView(context);
-        else return (TextView) convertView;
+    private EmailListItem getView(View convertView, Context context) {
+        if (convertView == null) return new EmailListItem(context);
+        else return (EmailListItem) convertView;
     }
 }
