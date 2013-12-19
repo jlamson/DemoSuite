@@ -12,8 +12,8 @@ public class Email {
     public String body;
     public int numberOfReplies;
     public boolean isFavorite;
-    public long time;
     public boolean hasAttachment;
+    public long time;
 
     public Email(List<String> people, String subject, String body, int numberOfReplies, boolean isFavorite, boolean hasAttachment, long time) {
         this.people = people;
