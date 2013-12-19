@@ -3,7 +3,9 @@
 
     <!-- Email List Item -->
     <dimen name="list_item_height">80dp</dimen>
-    <dimen name="subject_text_size">16dp</dimen>
+    <dimen name="from_text_size">18dp</dimen>
+    <dimen name="subject_text_size">14dp</dimen>
+    <dimen name="body_text_size">@dimen/subject_text_size</dimen>
     <dimen name="list_item_padding">16dp</dimen>
     <dimen name="list_item_icon_size">48dp</dimen>
 
