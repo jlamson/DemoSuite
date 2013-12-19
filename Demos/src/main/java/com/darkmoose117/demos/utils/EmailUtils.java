@@ -5,6 +5,7 @@ import android.text.format.*;
 import com.darkmoose117.demos.model.Email;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Joshua Lamson on 12/17/13.
@@ -47,18 +48,31 @@ public class EmailUtils {
 
     private static long[] sTimes = {
             System.currentTimeMillis() - 5  * DateUtils.MINUTE_IN_MILLIS,
+            System.currentTimeMillis() - 20 * DateUtils.MINUTE_IN_MILLIS,
             System.currentTimeMillis() - 45 * DateUtils.MINUTE_IN_MILLIS,
             System.currentTimeMillis() -      DateUtils.HOUR_IN_MILLIS,
-            System.currentTimeMillis() - 2  * DateUtils.DAY_IN_MILLIS
-                                       - 6  * DateUtils.HOUR_IN_MILLIS,
+            System.currentTimeMillis() - 6  * DateUtils.HOUR_IN_MILLIS,
+            System.currentTimeMillis() - 12 * DateUtils.HOUR_IN_MILLIS,
+            System.currentTimeMillis() - 1  * DateUtils.DAY_IN_MILLIS,
+            System.currentTimeMillis() - 3  * DateUtils.DAY_IN_MILLIS,
+            System.currentTimeMillis() - 5  * DateUtils.DAY_IN_MILLIS,
             System.currentTimeMillis() -      DateUtils.WEEK_IN_MILLIS
     };
 
-    public static final Email[] EMAILS = {
+    private static final Email[] EMAILS = {
         new Email(Arrays.asList(sPeople[0]), sSubjects[0], sBody, sNumberOfReplies[0], sIsFavorites[0] == 1, sHasAttachments[0] == 1, sTimes[0]),
         new Email(Arrays.asList(sPeople[1]), sSubjects[1], sBody, sNumberOfReplies[1], sIsFavorites[1] == 1, sHasAttachments[1] == 1, sTimes[1]),
         new Email(Arrays.asList(sPeople[2]), sSubjects[2], sBody, sNumberOfReplies[2], sIsFavorites[2] == 1, sHasAttachments[2] == 1, sTimes[2]),
         new Email(Arrays.asList(sPeople[3]), sSubjects[3], sBody, sNumberOfReplies[3], sIsFavorites[3] == 1, sHasAttachments[3] == 1, sTimes[3]),
-        new Email(Arrays.asList(sPeople[4]), sSubjects[4], sBody, sNumberOfReplies[4], sIsFavorites[4] == 1, sHasAttachments[4] == 1, sTimes[4])
+        new Email(Arrays.asList(sPeople[4]), sSubjects[4], sBody, sNumberOfReplies[4], sIsFavorites[4] == 1, sHasAttachments[4] == 1, sTimes[4]),
+        new Email(Arrays.asList(sPeople[0]), sSubjects[0], sBody, sNumberOfReplies[0], sIsFavorites[0] == 1, sHasAttachments[0] == 1, sTimes[5]),
+        new Email(Arrays.asList(sPeople[1]), sSubjects[1], sBody, sNumberOfReplies[1], sIsFavorites[1] == 1, sHasAttachments[1] == 1, sTimes[6]),
+        new Email(Arrays.asList(sPeople[2]), sSubjects[2], sBody, sNumberOfReplies[2], sIsFavorites[2] == 1, sHasAttachments[2] == 1, sTimes[7]),
+        new Email(Arrays.asList(sPeople[3]), sSubjects[3], sBody, sNumberOfReplies[3], sIsFavorites[3] == 1, sHasAttachments[3] == 1, sTimes[8]),
+        new Email(Arrays.asList(sPeople[4]), sSubjects[4], sBody, sNumberOfReplies[4], sIsFavorites[4] == 1, sHasAttachments[4] == 1, sTimes[9])
     };
+
+    public static List<Email> getDemoEmailList() {
+        return Arrays.asList(EMAILS);
+    }
 }
