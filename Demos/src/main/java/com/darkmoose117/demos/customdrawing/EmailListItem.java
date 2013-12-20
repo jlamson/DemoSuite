@@ -79,11 +79,13 @@ public class EmailListItem extends View {
             mPreviewLayout = getPreviewLayout(textWidth, builder.toString());
 
             // find the index of the first letter of the third line
-            int twoLineIndex = mPreviewLayout.getLineStart(2);
+            int twoLineIndex = mPreviewLayout.getLineStart(Math.min(mPreviewLayout.getLineCount(), 2));
 
-            // setup the preview again, but this time, limiting to two lines, then append an ellipses
-            mPreviewLayout = getPreviewLayout(textWidth, builder.subSequence(0, twoLineIndex - 3) + "\u2026");
-            Log.d(TAG, String.format("width: %d, textWidth: %d", w, textWidth));
+            // if the index is less than the entire string, chop of the end and add '...'
+            if (twoLineIndex < builder.length()) {
+                mPreviewLayout = getPreviewLayout(textWidth, builder.subSequence(0, twoLineIndex - 3) + "\u2026");
+                Log.d(TAG, String.format("width: %d, textWidth: %d", w, textWidth));
+            }
         }
     }
 
@@ -91,7 +93,7 @@ public class EmailListItem extends View {
         // make subject bold
         SpannableString preview = new SpannableString(text);
         preview.setSpan(new StyleSpan(Typeface.BOLD),
-                0, mEmail.subject.length() > text.length() ? text.length() : mEmail.subject.length(),
+                0, Math.min(text.length(), mEmail.subject.length()),
                 0);
 
         // create layout with full text
