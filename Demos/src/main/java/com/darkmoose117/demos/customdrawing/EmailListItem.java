@@ -1,6 +1,5 @@
 package com.darkmoose117.demos.customdrawing;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -9,11 +8,9 @@ import android.graphics.Typeface;
 import android.text.*;
 import android.text.Layout.*;
 import android.text.style.StyleSpan;
-import android.text.style.TextAppearanceSpan;
-import android.text.style.TypefaceSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.darkmoose117.demos.model.Email;
 import com.darkmoose117.demos.R;
@@ -23,6 +20,7 @@ import com.darkmoose117.demos.R;
  */
 public class EmailListItem extends View {
 
+    private static final String TAG = EmailListItem.class.getSimpleName();
     private static int sPadding = -1;
     private static int sIconSize = -1;
 
@@ -33,8 +31,6 @@ public class EmailListItem extends View {
     private TextPaint mPreviewPaint;
     private StaticLayout mFromLayout;
     private StaticLayout mPreviewLayout;
-
-    private boolean mHasNewData = false;
 
     public EmailListItem(Context context) {
         this(context, null);
@@ -53,15 +49,14 @@ public class EmailListItem extends View {
 
     public void setEmail(Email email) {
         mEmail = email;
-        mHasNewData = true;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        if (mHasNewData || w != oldw || h != oldh) {
-            final int textWidth = w
+        if (mEmail != null && (w != oldw || h != oldh)) {
+            final int textWidth = getWidth()
                     - 2 * sPadding - sIconSize // content and padding to left
                     - sPadding; // content and padding on right
 
@@ -80,15 +75,29 @@ public class EmailListItem extends View {
             builder.append(" \u2014 ");
             builder.append(mEmail.body);
 
-            SpannableString preview = new SpannableString(builder.toString());
-            preview.setSpan(new StyleSpan(Typeface.BOLD), 0, mEmail.subject.length(), 0);
+            // setup mPreviewLayout with full preview texts (any number of lines)
+            mPreviewLayout = getPreviewLayout(textWidth, builder.toString());
 
-            mPreviewLayout = new StaticLayout(preview, 0, preview.length(), mPreviewPaint,
-                    textWidth, Alignment.ALIGN_NORMAL, 1f, 1f, false,
-                    TextUtils.TruncateAt.END, textWidth);
+            // find the index of the first letter of the third line
+            int twoLineIndex = mPreviewLayout.getLineStart(2);
 
-            mHasNewData = false;
+            // setup the preview again, but this time, limiting to two lines, then append an ellipses
+            mPreviewLayout = getPreviewLayout(textWidth, builder.subSequence(0, twoLineIndex - 3) + "\u2026");
+            Log.d(TAG, String.format("width: %d, textWidth: %d", w, textWidth));
         }
+    }
+
+    private StaticLayout getPreviewLayout(int textWidth, String text) {
+        // make subject bold
+        SpannableString preview = new SpannableString(text);
+        preview.setSpan(new StyleSpan(Typeface.BOLD),
+                0, mEmail.subject.length() > text.length() ? text.length() : mEmail.subject.length(),
+                0);
+
+        // create layout with full text
+        return new StaticLayout(preview, 0, preview.length(), mPreviewPaint,
+                textWidth, Alignment.ALIGN_NORMAL, 1f, 1f, true,
+                TextUtils.TruncateAt.END, textWidth);
     }
 
     @Override
@@ -96,9 +105,6 @@ public class EmailListItem extends View {
         // Ignore given specs. Will always be the same size
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(
                 getResources().getDimensionPixelSize(R.dimen.list_item_height),
-                MeasureSpec.EXACTLY);
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                ViewGroup.LayoutParams.MATCH_PARENT,
                 MeasureSpec.EXACTLY);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -128,7 +134,6 @@ public class EmailListItem extends View {
     private void initPaints() {
         Resources res = getResources();
 
-
         mIconPaint = new TextPaint();
         mIconPaint.setColor(res.getColor(R.color.purple));
 
@@ -140,6 +145,6 @@ public class EmailListItem extends View {
         mPreviewPaint = new TextPaint();
         mPreviewPaint.setAntiAlias(true);
         mPreviewPaint.setColor(res.getColor(R.color.subject_text_color));
-        mPreviewPaint.setTextSize(res.getDimensionPixelSize(R.dimen.subject_text_size));
+        mPreviewPaint.setTextSize(res.getDimensionPixelSize(R.dimen.preview_text_size));
     }
 }
