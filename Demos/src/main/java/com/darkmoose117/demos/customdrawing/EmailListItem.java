@@ -26,9 +26,10 @@ public class EmailListItem extends View {
 
     private Email mEmail;
 
-    private Paint mIconPaint;
-    private TextPaint mFromPaint;
-    private TextPaint mPreviewPaint;
+    private static Paint mIconPaint;
+    private static TextPaint mFromPaint;
+    private static TextPaint mPreviewPaint;
+    private static TextPaint mDatePaint;
     private StaticLayout mFromLayout;
     private StaticLayout mPreviewLayout;
 
@@ -136,17 +137,30 @@ public class EmailListItem extends View {
     private void initPaints() {
         Resources res = getResources();
 
-        mIconPaint = new TextPaint();
-        mIconPaint.setColor(res.getColor(R.color.purple));
+        if (mIconPaint == null) {
+            mIconPaint = new TextPaint();
+            mIconPaint.setColor(res.getColor(R.color.purple));
+        }
 
-        mFromPaint = new TextPaint();
-        mFromPaint.setAntiAlias(true);
-        mFromPaint.setColor(res.getColor(R.color.subject_text_color));
-        mFromPaint.setTextSize(res.getDimensionPixelSize(R.dimen.from_text_size));
+        if (mFromPaint == null) {
+            mFromPaint = new TextPaint();
+            mFromPaint.setAntiAlias(true);
+            mFromPaint.setColor(res.getColor(R.color.subject_text_color));
+            mFromPaint.setTextSize(res.getDimensionPixelSize(R.dimen.from_text_size));
+        }
 
-        mPreviewPaint = new TextPaint();
-        mPreviewPaint.setAntiAlias(true);
-        mPreviewPaint.setColor(res.getColor(R.color.subject_text_color));
-        mPreviewPaint.setTextSize(res.getDimensionPixelSize(R.dimen.preview_text_size));
+        if (mPreviewPaint == null) {
+            mPreviewPaint = new TextPaint();
+            mPreviewPaint.setAntiAlias(true);
+            mPreviewPaint.setColor(res.getColor(R.color.subject_text_color));
+            mPreviewPaint.setTextSize(res.getDimensionPixelSize(R.dimen.preview_text_size));
+        }
+
+        if (mDatePaint == null) {
+            mDatePaint = new TextPaint();
+            mDatePaint.setAntiAlias(true);
+            mDatePaint.setColor(res.getColor(R.color.date_text_color));
+            mDatePaint.setTextSize(res.getDimensionPixelSize(R.dimen.date_text_size));
+        }
     }
 }

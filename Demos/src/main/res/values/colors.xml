@@ -16,5 +16,6 @@
 
     <!-- Email Colors -->
     <color name="subject_text_color">@color/black</color>
+    <color name="date_text_color">@color/black</color>
 
 </resources>

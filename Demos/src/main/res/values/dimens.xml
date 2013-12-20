@@ -7,5 +7,6 @@
     <dimen name="preview_text_size">13dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
     <dimen name="list_item_icon_size">48dp</dimen>
+    <dimen name="date_text_size">10dp</dimen>
 
 </resources>
