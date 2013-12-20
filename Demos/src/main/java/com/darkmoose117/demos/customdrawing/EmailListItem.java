@@ -57,10 +57,12 @@ public class EmailListItem extends View {
         super.onSizeChanged(w, h, oldw, oldh);
 
         if (mEmail != null && (w != oldw || h != oldh)) {
+            // Obtain width that Preview and From text can obtain
             final int textWidth = getWidth()
                     - 2 * sPadding - sIconSize // content and padding to left
                     - sPadding; // content and padding on right
 
+            // Create From String
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < mEmail.people.size(); i++) {
                 builder.append(mEmail.people.get(i));
@@ -68,9 +70,11 @@ public class EmailListItem extends View {
                 if (i < mEmail.people.size() - 1) builder.append(", ");
             }
 
+            // Create From Layout
             mFromLayout = new StaticLayout(builder.toString(), mFromPaint, textWidth,
                     Alignment.ALIGN_NORMAL, 1f, 1f, false);
 
+            // Create Preview String
             builder = new StringBuilder();
             builder.append(mEmail.subject);
             builder.append(" \u2014 ");
@@ -87,6 +91,8 @@ public class EmailListItem extends View {
                 mPreviewLayout = getPreviewLayout(textWidth, builder.subSequence(0, twoLineIndex - 3) + "\u2026");
                 Log.d(TAG, String.format("width: %d, textWidth: %d", w, textWidth));
             }
+
+
         }
     }
 
