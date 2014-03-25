@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.darkmoose117.demos.R;
-import com.darkmoose117.demos.model.DemoUtils;
+import com.darkmoose117.demos.utils.DemoUtils;
 
 /**
  * Created by Joshua Lamson on 11/25/13.

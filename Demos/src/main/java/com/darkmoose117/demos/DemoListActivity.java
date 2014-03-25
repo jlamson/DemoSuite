@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
 
 import com.darkmoose117.demos.interfaces.OnDemoSelected;
-import com.darkmoose117.demos.model.DemoUtils;
+import com.darkmoose117.demos.utils.DemoUtils;
 
 /**
  * An activity representing a list of Demos. This activity has different presentations for handset
