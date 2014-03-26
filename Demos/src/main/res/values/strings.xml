@@ -15,4 +15,12 @@
     <string name="notification_progress_button">Create Progress notification</string>
     <string name="notification_ongoing_progress_cb">Make progress continuing</string>
 
+    <!-- Android Wear Notifications -->
+    <string name="default_notification_reply_label">Reply</string>
+    <string-array name="default_notification_replies">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Maybe</item>
+    </string-array>
+
 </resources>

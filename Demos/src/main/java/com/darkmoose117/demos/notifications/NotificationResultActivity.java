@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ public class NotificationResultActivity extends Activity implements View.OnClick
 
     private static final String EXTRA_TEXT_TO_DISPLAY = "EXTRA_TEXT_TO_DISPLAY";
     private static final String EXTRA_IS_NOTIFICATION_ONGOING = "EXTRA_IS_NOTIFICATION_ONGOING";
+    public static final String EXTRA_REPLY_TEXT = "EXTRA_REPLY_TEXT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,15 @@ public class NotificationResultActivity extends Activity implements View.OnClick
             View ongoingButton = findViewById(R.id.remove_ongoing_button);
             ongoingButton.setOnClickListener(this);
             ongoingButton.setVisibility(View.VISIBLE);
+        }
+
+        TextView replyTextView = (TextView) findViewById(R.id.notification_reply_text);
+        String reply = extras.getString(EXTRA_REPLY_TEXT);
+        if (!TextUtils.isEmpty(reply)) {
+            replyTextView.setVisibility(View.VISIBLE);
+            replyTextView.setText(reply);
+        } else {
+            replyTextView.setVisibility(View.GONE);
         }
 
     }

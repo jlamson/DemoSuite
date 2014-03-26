@@ -1,11 +1,13 @@
 package com.darkmoose117.demos.notifications;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
 import android.preview.support.v4.app.NotificationManagerCompat;
+import android.preview.support.wearable.notifications.RemoteInput;
 import android.preview.support.wearable.notifications.WearableNotifications;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -32,7 +34,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
      *      http://developer.android.com/guide/topics/ui/notifiers/notifications.html#CreateNotification
      */
 
-    private NotificationManager mNotificationManager;
+    private NotificationManagerCompat mNotificationManager;
     private CheckBox mOngoingCheckbox;
     private CheckBox mProgressCheckbox;
 
@@ -55,8 +57,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mNotificationManager = (NotificationManager) activity.getSystemService(
-                Context.NOTIFICATION_SERVICE);
+        mNotificationManager = NotificationManagerCompat.from(activity);
     }
 
     @Override
@@ -75,6 +76,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
 
     private void showSimpleNotification() {
         final boolean ongoing = mOngoingCheckbox.isChecked();
+        final String replyLabel = getResources().getString(R.string.default_notification_reply_label);
+        final String[] replyChoices = getResources().getStringArray(R.array.default_notification_replies);
+
         PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
                 getActivity(),
                 "You got here from the simple notification",
@@ -84,15 +88,32 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setSmallIcon(R.drawable.ic_stat_test)
                 .setContentTitle("Test!")
                 .setContentText("This is a simple notification")
+                .setContentIntent(pendingIntent)
                 .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setAutoCancel(!ongoing)
-                .setOngoing(ongoing)
-                .setContentIntent(pendingIntent)
-                .addAction(R.drawable.wear_accept, "Accept", pendingIntent)
-                .addAction(R.drawable.wear_cancel, "Cancel", pendingIntent);
+                .setAutoCancel(true)
+                .setOngoing(ongoing);
 
-        mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
+        Notification notification;
+        if (ongoing) {
+            notification = builder.build();
+        } else {
+            RemoteInput remoteInput = new RemoteInput.Builder(NotificationResultActivity.EXTRA_REPLY_TEXT)
+                    .setLabel(replyLabel)
+                    .setChoices(replyChoices)
+                    .build();
+
+            WearableNotifications.Action replyAction = new WearableNotifications.Action.Builder(
+                    R.drawable.wear_reply, "Reply", pendingIntent)
+                    .addRemoteInput(remoteInput)
+                    .build();
+
+            notification = new WearableNotifications.Builder(builder)
+                    .addAction(replyAction)
+                    .build();
+        }
+
+        mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, notification);
     }
 
     private void showProgressNotification() {
