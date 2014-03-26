@@ -2,8 +2,11 @@ package com.darkmoose117.demos.notifications;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
+import android.preview.support.v4.app.NotificationManagerCompat;
+import android.preview.support.wearable.notifications.WearableNotifications;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -71,20 +74,24 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     }
 
     private void showSimpleNotification() {
-        boolean ongoing = mOngoingCheckbox.isChecked();
+        final boolean ongoing = mOngoingCheckbox.isChecked();
+        PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
+                getActivity(),
+                "You got here from the simple notification",
+                ongoing);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)
-                .setContentTitle("Sup yo")
+                .setContentTitle("Test!")
                 .setContentText("This is a simple notification")
                 .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(!ongoing)
                 .setOngoing(ongoing)
-                .setContentIntent(NotificationResultActivity.getNotificationIntent(
-                        getActivity(),
-                        "You got here from the simple notification",
-                        ongoing
-                ));
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.wear_accept, "Accept", pendingIntent)
+                .addAction(R.drawable.wear_cancel, "Cancel", pendingIntent);
+
         mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
     }
 
