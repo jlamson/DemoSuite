@@ -17,9 +17,9 @@ public interface Constants {
     public static final String CUSTOM_DRAWING_DEMO_TITLE        = "Custom Drawing";
 
     // Notification keys
-    public static final int SIMPLE_NOTIFICATION_ID              = 0;
-    public static final int REPLY_NOTIFICATION_ID               = 1;
-    public static final int PROGRESS_NOTIFICATION_ID            = 2;
-    public static final int PROGRESS_COMPLETE_NOTIFICATION_ID   = 3;
+    public static final int SIMPLE_NOTIFICATION_ID              = 1;
+    public static final int REPLY_NOTIFICATION_ID               = 2;
+    public static final int PROGRESS_NOTIFICATION_ID            = 3;
+    public static final int PROGRESS_COMPLETE_NOTIFICATION_ID   = 4;
 
 }

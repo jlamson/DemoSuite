@@ -78,7 +78,8 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     private void showSimpleNotification() {
         PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
                 getActivity(),
-                "You got here from the simple notification");
+                "You got here from the simple notification",
+                SIMPLE_NOTIFICATION_ID);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)
@@ -99,7 +100,8 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
 
         PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
                 getActivity(),
-                "You got here from a reply notification");
+                "You got here from a reply notification",
+                REPLY_NOTIFICATION_ID);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)

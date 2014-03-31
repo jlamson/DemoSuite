@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preview.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.darkmoose117.demos.R;
 
 public class NotificationResultActivity extends Activity implements Constants {
 
+    private static final String EXTRA_FOR_NOTIFICATION = "EXTRA_FOR_NOTIFICATION";
     private static final String EXTRA_TEXT_TO_DISPLAY = "EXTRA_TEXT_TO_DISPLAY";
     public static final String EXTRA_REPLY_TEXT = "EXTRA_REPLY_TEXT";
 
@@ -41,12 +43,19 @@ public class NotificationResultActivity extends Activity implements Constants {
         } else {
             replyTextView.setText(String.format("Reply: \"%s\"", reply));
         }
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        final int notificationId = extras.getInt(EXTRA_FOR_NOTIFICATION, -1);
+        if (notificationId > 0) {
+            manager.cancel(notificationId);
+        }
     }
 
-    public static PendingIntent getNotificationIntent(Context context, String textToDisplay) {
+    public static PendingIntent getNotificationIntent(Context context, String textToDisplay, int notificationId) {
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, NotificationResultActivity.class);
         resultIntent.putExtra(EXTRA_TEXT_TO_DISPLAY, textToDisplay);
+        resultIntent.putExtra(EXTRA_FOR_NOTIFICATION, notificationId);
 
         // The stack builder object will contain an artificial back stack for the started Activity.
         // This ensures that navigating backward from the Activity leads out of your application to
