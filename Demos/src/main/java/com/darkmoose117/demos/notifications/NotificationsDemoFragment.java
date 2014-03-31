@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preview.support.v4.app.NotificationManagerCompat;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 import com.darkmoose117.demos.Constants;
 import com.darkmoose117.demos.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by Joshua Lamson on 11/25/13.
@@ -43,8 +46,10 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
         View view = inflater.inflate(R.layout.notifications_demo_fragment, container, false);
 
         view.findViewById(R.id.simple_notification_button).setOnClickListener(this);
-        view.findViewById(R.id.reply_notification_button).setOnClickListener(this);
         view.findViewById(R.id.progress_notification_button).setOnClickListener(this);
+        
+        view.findViewById(R.id.reply_notification_button).setOnClickListener(this);
+        view.findViewById(R.id.multi_page_notification_button).setOnClickListener(this);
 
         mProgressCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_progress_cb);
 
@@ -64,11 +69,14 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
             case R.id.simple_notification_button:
                 showSimpleNotification();
                 break;
+            case R.id.progress_notification_button:
+                showProgressNotification();
+                break;
             case R.id.reply_notification_button:
                 showReplyNotification();
                 break;
-            case R.id.progress_notification_button:
-                showProgressNotification();
+            case R.id.multi_page_notification_button:
+                showMultiPageNotification();
                 break;
             default:
                 Toast.makeText(getActivity(), "not implemented yet", Toast.LENGTH_SHORT).show();
@@ -123,6 +131,38 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .build();
 
         mNotificationManager.notify(REPLY_NOTIFICATION_ID, notification);
+    }
+
+    private void showMultiPageNotification() {
+        ArrayList<Notification> notificationPages = new ArrayList<Notification>();
+        String[] pageDescriptions = getResources().getStringArray(R.array.multi_page_notification_text);
+        final int pageCount = pageDescriptions.length;
+
+        for (int i = 0; i < pageCount; ++i) {
+            NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+            style.bigText(pageDescriptions[i]);
+            if (i == pageCount - 1) {
+                style.setBigContentTitle("In Summary...");
+            } else {
+                style.setBigContentTitle(String.format("Step %d of %d", i + 1, pageCount));
+            }
+            style.setSummaryText("");
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
+            builder.setStyle(style);
+            notificationPages.add(builder.build());
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
+            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background))
+            .setContentTitle("Multi-Pager")
+            .setContentText("It's my D#@% in a box!")
+            .setSmallIcon(R.drawable.ic_stat_test);
+
+        Notification notification = new WearableNotifications.Builder(builder)
+                .addPages(notificationPages)
+                .build();
+
+        mNotificationManager.notify(MULTI_PAGE_NOTIFICATION_ID, notification);
     }
 
     private void showProgressNotification() {

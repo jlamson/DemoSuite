@@ -17,10 +17,20 @@
 
     <!-- Android Wear Notifications -->
     <string name="default_notification_reply_label">Reply</string>
+    <string name="notification_multi_page_button">Show Multi-Page Notification</string>
+    <string name="wear_customized_notifications_label">Customized For Wear</string>
+    
     <string-array name="default_notification_replies">
         <item>Yes</item>
         <item>No</item>
         <item>Maybe</item>
+    </string-array>
+    
+    <string-array name="multi_page_notification_text">
+        <item>Step 1: Cut a hole in the box.</item>
+        <item>Step 2: Put yo\' junk in that box.</item>
+        <item>Step 3: Make \'em open the box, because that\'s the way we do it.</item>
+        <item>Christmas? Dick in a box. Hanukkah? Dick in a box. Kwanzaa? A Dick in a box. Every single holiday: dick in a box. Over at your parents\' house: a dick in a box. Mid-day at the grocery store: a dick in a box. Coding some Android… a dick in a box</item>
     </string-array>
 
 </resources>
