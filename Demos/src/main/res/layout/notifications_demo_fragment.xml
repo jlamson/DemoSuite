@@ -27,12 +27,11 @@
             android:layout_height="wrap_content"
             android:text="@string/notification_simple_button"/>
 
-        <CheckBox
-            android:id="@+id/notification_ongoing_simple_cb"
+        <Button
+            android:id="@+id/reply_notification_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="@string/notification_ongoing_cb"/>
+            android:text="@string/notification_reply_button"/>
 
         <Button
             android:id="@+id/progress_notification_button"

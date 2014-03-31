@@ -18,7 +18,8 @@ public interface Constants {
 
     // Notification keys
     public static final int SIMPLE_NOTIFICATION_ID              = 0;
-    public static final int PROGRESS_NOTIFICATION_ID            = 1;
-    public static final int PROGRESS_COMPLETE_NOTIFICATION_ID   = 2;
+    public static final int REPLY_NOTIFICATION_ID               = 1;
+    public static final int PROGRESS_NOTIFICATION_ID            = 2;
+    public static final int PROGRESS_COMPLETE_NOTIFICATION_ID   = 3;
 
 }

@@ -29,14 +29,11 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     private static final String TAG = NotificationsDemoFragment.class.getSimpleName();
 
     /*
-     *  TODO do a progress notification
-     *      http://developer.android.com/guide/topics/ui/notifiers/notifications.html#Progress
      *  TODO do a big style notification
      *      http://developer.android.com/guide/topics/ui/notifiers/notifications.html#CreateNotification
      */
 
     private NotificationManagerCompat mNotificationManager;
-    private CheckBox mOngoingCheckbox;
     private CheckBox mProgressCheckbox;
 
     private int mNotificationCount = 0;
@@ -46,9 +43,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
         View view = inflater.inflate(R.layout.notifications_demo_fragment, container, false);
 
         view.findViewById(R.id.simple_notification_button).setOnClickListener(this);
-        mOngoingCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_simple_cb);
-
+        view.findViewById(R.id.reply_notification_button).setOnClickListener(this);
         view.findViewById(R.id.progress_notification_button).setOnClickListener(this);
+
         mProgressCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_progress_cb);
 
         return view;
@@ -67,6 +64,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
             case R.id.simple_notification_button:
                 showSimpleNotification();
                 break;
+            case R.id.reply_notification_button:
+                showReplyNotification();
+                break;
             case R.id.progress_notification_button:
                 showProgressNotification();
                 break;
@@ -76,14 +76,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     }
 
     private void showSimpleNotification() {
-        final boolean ongoing = mOngoingCheckbox.isChecked();
-        final String replyLabel = getResources().getString(R.string.default_notification_reply_label);
-        final String[] replyChoices = getResources().getStringArray(R.array.default_notification_replies);
-
         PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
                 getActivity(),
-                "You got here from the simple notification",
-                ongoing);
+                "You got here from the simple notification");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_stat_test)
@@ -93,30 +88,39 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(true)
-                .setOngoing(ongoing)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background));
 
+        mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, builder.build());
+    }
 
-        Notification notification;
-        if (ongoing) {
-            notification = builder.build();
-        } else {
-            RemoteInput remoteInput = new RemoteInput.Builder(NotificationResultActivity.EXTRA_REPLY_TEXT)
-                    .setLabel(replyLabel)
-                    .setChoices(replyChoices)
-                    .build();
+    private void showReplyNotification() {
+        final String replyLabel = getResources().getString(R.string.default_notification_reply_label);
+        final String[] replyChoices = getResources().getStringArray(R.array.default_notification_replies);
 
-            WearableNotifications.Action replyAction = new WearableNotifications.Action.Builder(
-                    R.drawable.wear_reply, "Reply", pendingIntent)
-                    .addRemoteInput(remoteInput)
-                    .build();
+        PendingIntent pendingIntent = NotificationResultActivity.getNotificationIntent(
+                getActivity(),
+                "You got here from a reply notification");
 
-            notification = new WearableNotifications.Builder(builder)
-                    .addAction(replyAction)
-                    .build();
-        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
+                .setSmallIcon(R.drawable.ic_stat_test)
+                .setContentTitle("Test!")
+                .setContentText("You can reply to this!")
+                .setContentIntent(pendingIntent)
+                .setNumber(++mNotificationCount)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setAutoCancel(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background));
 
-        mNotificationManager.notify(SIMPLE_NOTIFICATION_ID, notification);
+        RemoteInput remoteInput = new RemoteInput.Builder(NotificationResultActivity.EXTRA_REPLY_TEXT)
+                .setLabel(replyLabel)
+                .setChoices(replyChoices)
+                .build();
+
+        Notification notification = new WearableNotifications.Builder(builder)
+                .addRemoteInputForContentIntent(remoteInput)
+                .build();
+
+        mNotificationManager.notify(REPLY_NOTIFICATION_ID, notification);
     }
 
     private void showProgressNotification() {

@@ -14,10 +14,9 @@ import android.widget.TextView;
 import com.darkmoose117.demos.Constants;
 import com.darkmoose117.demos.R;
 
-public class NotificationResultActivity extends Activity implements View.OnClickListener, Constants {
+public class NotificationResultActivity extends Activity implements Constants {
 
     private static final String EXTRA_TEXT_TO_DISPLAY = "EXTRA_TEXT_TO_DISPLAY";
-    private static final String EXTRA_IS_NOTIFICATION_ONGOING = "EXTRA_IS_NOTIFICATION_ONGOING";
     public static final String EXTRA_REPLY_TEXT = "EXTRA_REPLY_TEXT";
 
     @Override
@@ -33,29 +32,21 @@ public class NotificationResultActivity extends Activity implements View.OnClick
         TextView textView = (TextView) findViewById(R.id.notification_result_text);
         textView.setText(extras.getString(EXTRA_TEXT_TO_DISPLAY));
 
-        if (extras.getBoolean(EXTRA_IS_NOTIFICATION_ONGOING, false)) {
-            View ongoingButton = findViewById(R.id.remove_ongoing_button);
-            ongoingButton.setOnClickListener(this);
-            ongoingButton.setVisibility(View.VISIBLE);
-        }
-
         TextView replyTextView = (TextView) findViewById(R.id.notification_reply_text);
         String reply = extras.getString(EXTRA_REPLY_TEXT);
-        if (!TextUtils.isEmpty(reply)) {
-            replyTextView.setVisibility(View.VISIBLE);
-            replyTextView.setText(reply);
-        } else {
-            replyTextView.setVisibility(View.GONE);
-        }
 
+        replyTextView.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(reply)) {
+            replyTextView.setText("No Reply was provided. In this case, we'd assume the user clicked the device notification, and show the conversation.");
+        } else {
+            replyTextView.setText(String.format("Reply: \"%s\"", reply));
+        }
     }
 
-    public static PendingIntent getNotificationIntent(Context context, String textToDisplay,
-                                                      boolean ongoing) {
+    public static PendingIntent getNotificationIntent(Context context, String textToDisplay) {
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, NotificationResultActivity.class);
         resultIntent.putExtra(EXTRA_TEXT_TO_DISPLAY, textToDisplay);
-        resultIntent.putExtra(EXTRA_IS_NOTIFICATION_ONGOING, ongoing);
 
         // The stack builder object will contain an artificial back stack for the started Activity.
         // This ensures that navigating backward from the Activity leads out of your application to
@@ -72,11 +63,5 @@ public class NotificationResultActivity extends Activity implements View.OnClick
                 0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    @Override
-    public void onClick(View v) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(
-                    Context.NOTIFICATION_SERVICE);
 
-        notificationManager.cancel(SIMPLE_NOTIFICATION_ID);
-    }
 }
