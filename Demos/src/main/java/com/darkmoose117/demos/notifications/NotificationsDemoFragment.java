@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preview.support.v4.app.NotificationManagerCompat;
 import android.preview.support.wearable.notifications.RemoteInput;
@@ -92,7 +93,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(true)
-                .setOngoing(ongoing);
+                .setOngoing(ongoing)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background));
+
 
         Notification notification;
         if (ongoing) {
