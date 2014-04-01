@@ -10,11 +10,10 @@
         android:layout_height="wrap_content"
         android:padding="16dp"/>
 
-    <Button
-        android:id="@+id/remove_ongoing_button"
+    <TextView
+        android:id="@+id/notification_reply_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/remove_ongoing_notification_button"
-        android:visibility="gone"/>
+        android:padding="16dp"/>
 
 </LinearLayout>
