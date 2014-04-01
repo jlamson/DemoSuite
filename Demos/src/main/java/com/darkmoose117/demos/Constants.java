@@ -22,5 +22,9 @@ public interface Constants {
     public static final int MULTI_PAGE_NOTIFICATION_ID          = 3;
     public static final int PROGRESS_NOTIFICATION_ID            = 4;
     public static final int PROGRESS_COMPLETE_NOTIFICATION_ID   = 5;
+    // We add numbers to this value, so ensure it's always larger than the others
+    public static final int STACKED_NOTIFICATION_ID             = 6;
+
+    public static final String STACKED_NOTIFICATION_GROUP_KEY = "stacked_group_key";
 
 }

@@ -50,6 +50,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
         
         view.findViewById(R.id.reply_notification_button).setOnClickListener(this);
         view.findViewById(R.id.multi_page_notification_button).setOnClickListener(this);
+        view.findViewById(R.id.stacked_notification_button).setOnClickListener(this);
 
         mProgressCheckbox = (CheckBox) view.findViewById(R.id.notification_ongoing_progress_cb);
 
@@ -77,6 +78,9 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 break;
             case R.id.multi_page_notification_button:
                 showMultiPageNotification();
+                break;
+            case R.id.stacked_notification_button:
+                showStackedNotification();
                 break;
             default:
                 Toast.makeText(getActivity(), "not implemented yet", Toast.LENGTH_SHORT).show();
@@ -134,6 +138,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
     }
 
     private void showMultiPageNotification() {
+        final Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.jt);
         ArrayList<Notification> notificationPages = new ArrayList<Notification>();
         String[] pageDescriptions = getResources().getStringArray(R.array.multi_page_notification_text);
         final int pageCount = pageDescriptions.length;
@@ -153,7 +158,7 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
-            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background))
+            .setLargeIcon(background)
             .setContentTitle("Multi-Pager")
             .setContentText("It's my D#@% in a box!")
             .setSmallIcon(R.drawable.ic_stat_test);
@@ -163,6 +168,39 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .build();
 
         mNotificationManager.notify(MULTI_PAGE_NOTIFICATION_ID, notification);
+    }
+
+    private void showStackedNotification() {
+        final Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.jt);
+        final ArrayList<Notification> notifications = new ArrayList<Notification>();
+        final String[] messages = getResources().getStringArray(R.array.stacked_notification_text);
+        final int COUNT = messages.length;
+
+        for (String message : messages) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
+                    .setLargeIcon(background)
+                    .setContentTitle("Message: J.T")
+                    .setContentText(message)
+                    .setSmallIcon(R.drawable.ic_stat_test);
+
+            notifications.add(new WearableNotifications.Builder(builder)
+                    .setGroup(STACKED_NOTIFICATION_GROUP_KEY)
+                    .build());
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity())
+                .setLargeIcon(background)
+                .setContentTitle("J.T")
+                .setContentText(COUNT + " new messages from: J.T")
+                .setSmallIcon(R.drawable.ic_stat_test);
+
+        notifications.add(new WearableNotifications.Builder(builder)
+                .setGroup(STACKED_NOTIFICATION_GROUP_KEY, WearableNotifications.GROUP_ORDER_SUMMARY)
+                .build());
+
+        for (int i = 0; i < notifications.size(); i++) {
+            mNotificationManager.notify(STACKED_NOTIFICATION_ID + i, notifications.get(i));
+        }
     }
 
     private void showProgressNotification() {

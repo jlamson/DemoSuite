@@ -19,7 +19,8 @@
     <string name="default_notification_reply_label">Reply</string>
     <string name="notification_multi_page_button">Show Multi-Page Notification</string>
     <string name="wear_customized_notifications_label">Customized For Wear</string>
-    
+    <string name="notification_stacked_button">Show a stacked notification</string>
+
     <string-array name="default_notification_replies">
         <item>Yes</item>
         <item>No</item>
@@ -31,6 +32,14 @@
         <item>Step 2: Put yo\' junk in that box.</item>
         <item>Step 3: Make \'em open the box, because that\'s the way we do it.</item>
         <item>Christmas? Dick in a box. Hanukkah? Dick in a box. Kwanzaa? A Dick in a box. Every single holiday: dick in a box. Over at your parents\' house: a dick in a box. Mid-day at the grocery store: a dick in a box. Coding some Android… a dick in a box</item>
+    </string-array>
+
+    <string-array name="stacked_notification_text">
+        <item>Hey bro! I have a great new gift idea!</item>
+        <item>Got a box?</item>
+        <item>Dude, what you got going on for Mother\'s Day? Guess who\'s got another idea!?</item>
+        <item>Your Mom says hi.</item>
+        <item>Dude, was it just me or was that Gaga?</item>
     </string-array>
 
 </resources>

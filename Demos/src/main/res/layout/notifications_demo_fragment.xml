@@ -14,54 +14,65 @@
         android:textSize="22sp"
         android:gravity="center"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/simple_notification_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/notification_simple_button"/>
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
-        <Button
-            android:id="@+id/progress_notification_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/notification_progress_button"
-            android:layout_marginTop="16dp"/>
+            <Button
+                android:id="@+id/simple_notification_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_simple_button"/>
 
-        <CheckBox
-            android:id="@+id/notification_ongoing_progress_cb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="@string/notification_ongoing_progress_cb"/>
+            <Button
+                android:id="@+id/progress_notification_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_progress_button"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center_horizontal"
-            android:textSize="18sp"
-            android:text="@string/wear_customized_notifications_label" />
+            <CheckBox
+                android:id="@+id/notification_ongoing_progress_cb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/notification_ongoing_progress_cb"/>
 
-        <Button
-            android:id="@+id/reply_notification_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/notification_reply_button"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:text="@string/wear_customized_notifications_label" />
 
-        <Button
-            android:id="@+id/multi_page_notification_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/notification_multi_page_button"/>
+            <Button
+                android:id="@+id/reply_notification_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_reply_button"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/multi_page_notification_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_multi_page_button"/>
+
+            <Button
+                android:id="@+id/stacked_notification_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_stacked_button"/>
+
+        </LinearLayout>
+
+    </ScrollView>
     
 </LinearLayout>
     
