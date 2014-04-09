@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Notes:
+
+    Widths and Heights
+        1 row/col = 40dp
+        2 row/col = 110dp
+        3 row/col = 180dp
+        ...
+        n row/col = 70n - 30
+
+    TODO set preview logo
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="40dp"
+    android:updatePeriodMillis="3600000"
+    android:initialLayout="@layout/notifications_appwidget">
+</appwidget-provider>

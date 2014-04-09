@@ -98,7 +98,6 @@ public class NotificationsDemoFragment extends Fragment implements Constants, Vi
                 .setContentTitle("Test!")
                 .setContentText("This is a simple notification")
                 .setContentIntent(pendingIntent)
-                .setNumber(++mNotificationCount)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(true)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.wear_background));

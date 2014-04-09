@@ -20,6 +20,7 @@
     <string name="notification_multi_page_button">Show Multi-Page Notification</string>
     <string name="wear_customized_notifications_label">Customized For Wear</string>
     <string name="notification_stacked_button">Show a stacked notification</string>
+    <string name="notification_button_label">Click me yo\'</string>
 
     <string-array name="default_notification_replies">
         <item>Yes</item>

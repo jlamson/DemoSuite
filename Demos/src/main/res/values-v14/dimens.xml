@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Note: This is also defined in values/dimens. on 14+, this margin is added automatically -->
+    <dimen name="notification_margin">0dp</dimen>
+
+</resources>
