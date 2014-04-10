@@ -10,11 +10,13 @@ public interface Constants {
     // indexes and count for demos.
     public static final int NOTIFICATIONS_DEMO_ID       = 0;
     public static final int CUSTOM_DRAWING_DEMO_ID      = 1;
-    public static final int DEMO_COUNT                  = 2;
+    public static final int ANIMATION_DEMO_ID           = 2;
+    public static final int DEMO_COUNT                  = 3;
 
     // titles for demos
-    public static final String NOTIFICATIONS_DEMO_TITLE         = "Notifications";
-    public static final String CUSTOM_DRAWING_DEMO_TITLE        = "Custom Drawing";
+    public static final String NOTIFICATIONS_DEMO_TITLE     = "Notifications";
+    public static final String CUSTOM_DRAWING_DEMO_TITLE    = "Custom Drawing";
+    public static final String ANIMATION_DEMO_TITLE         = "4.0+ Animation";
 
     // Notification keys
     public static final int SIMPLE_NOTIFICATION_ID              = 1;

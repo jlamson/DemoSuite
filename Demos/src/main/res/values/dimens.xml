@@ -11,5 +11,6 @@
 
     <!-- Note: This is also defined in values-v14/dimens. on 14+, this margin is added automatically -->
     <dimen name="notification_margin">16dp</dimen>
+    <dimen name="animation_circle_diameter">100dp</dimen>
 
 </resources>

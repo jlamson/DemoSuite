@@ -7,7 +7,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <!-- NOTIFICATIONS -->
+    <!-- SECTION Notifications -->
+
     <string name="notification_title">Notifications</string>
     <string name="notification_simple_button">Create simple notification</string>
     <string name="notification_reply_button">Show Voice Reply Notification</string>
@@ -15,12 +16,21 @@
     <string name="notification_progress_button">Create Progress notification</string>
     <string name="notification_ongoing_progress_cb">Make progress continuing</string>
 
-    <!-- Android Wear Notifications -->
+    <!-- SECTION Android Wear Notifications -->
+
     <string name="default_notification_reply_label">Reply</string>
     <string name="notification_multi_page_button">Show Multi-Page Notification</string>
     <string name="wear_customized_notifications_label">Customized For Wear</string>
     <string name="notification_stacked_button">Show a stacked notification</string>
     <string name="notification_button_label">Click me yo\'</string>
+
+    <!-- SECTION Animation Demo-->
+
+    <string name="enter_circle_prompt">Press anywhere to bring up the circle</string>
+    <string name="exit_circle_prompt">Press anywhere to dismiss the circle</string>
+
+
+    <!-- SECTION String Arrays -->
 
     <string-array name="default_notification_replies">
         <item>Yes</item>
