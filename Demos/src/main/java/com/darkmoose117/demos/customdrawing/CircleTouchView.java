@@ -1,9 +1,7 @@
 package com.darkmoose117.demos.customdrawing;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.*;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -21,8 +19,9 @@ public class CircleTouchView extends View {
     private static float sSmallCircleRadius;
     private static float sInterceptRadius;
 
-    private Paint mCirclePaint;
-    private Paint mInterceptPaint;
+    private static Paint sCirclePaint;
+    private static Paint sInterceptPaint;
+    private static TextPaint sDebugTextPaint;
     private RectF mRectF = new RectF();
 
     private float mPointerX;
@@ -40,14 +39,23 @@ public class CircleTouchView extends View {
     public CircleTouchView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mCirclePaint.setColor(getResources().getColor(R.color.purple));
-        mCirclePaint.setStrokeWidth(getResources().getDimension(R.dimen.large_circle_stoke_width));
-        mCirclePaint.setStyle(Paint.Style.STROKE);
+        if (sCirclePaint == null) {
+            sCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sCirclePaint.setColor(getResources().getColor(R.color.purple));
+            sCirclePaint.setStrokeWidth(getResources().getDimension(R.dimen.large_circle_stoke_width));
+            sCirclePaint.setStyle(Paint.Style.STROKE);
+        }
 
-        mInterceptPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mInterceptPaint.setColor(getResources().getColor(R.color.green));
-        mInterceptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        if (sInterceptPaint == null) {
+            sInterceptPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sInterceptPaint.setColor(getResources().getColor(R.color.green));
+            sInterceptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        }
+
+        if (sDebugTextPaint == null) {
+            sDebugTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+            sDebugTextPaint.setTextSize(getResources().getDimension(R.dimen.debug_text_size));
+        }
 
         sLargeCircleRadius = getResources().getDimension(R.dimen.large_circle_radius);
         sSmallCircleRadius = getResources().getDimension(R.dimen.small_circle_radius);
@@ -62,14 +70,14 @@ public class CircleTouchView extends View {
         final int centerY = canvas.getHeight() / 2;
 
         setRectForCircle(centerX, centerY, sLargeCircleRadius);
-        canvas.drawArc(mRectF, 0, 360, false, mCirclePaint);
+        canvas.drawArc(mRectF, 0, 360, false, sCirclePaint);
 
         if (mIsPointerDown) {
             setRectForCircle(mPointerX, mPointerY, sSmallCircleRadius);
-            canvas.drawArc(mRectF, 0, 360, false, mCirclePaint);
+            canvas.drawArc(mRectF, 0, 360, false, sCirclePaint);
 
             float[] intercepts = getCircleIntercepts(centerX, centerY, sLargeCircleRadius,
-                    mPointerX, mPointerY, sSmallCircleRadius);
+                    mPointerX, mPointerY, sSmallCircleRadius, canvas);
 
             if (intercepts.length >= 4) drawPoint(canvas, intercepts[2], intercepts[3]);
             if (intercepts.length >= 2) drawPoint(canvas, intercepts[0], intercepts[1]);
@@ -81,9 +89,10 @@ public class CircleTouchView extends View {
     }
 
     private void drawPoint(Canvas canvas, float x, float y) {
-        canvas.drawCircle(x, y, sInterceptRadius, mInterceptPaint);
+        canvas.drawCircle(x, y, sInterceptRadius, sInterceptPaint);
     }
 
+    private static Double sDoubleHolder = new Double(0.0);
     /**
      *
      * @param centerX the X of the center of the large stationary circle
@@ -92,38 +101,88 @@ public class CircleTouchView extends View {
      * @param pointerX  the X of the circle centered at the user's pointer finger
      * @param pointerY  the Y of the circle centered at the user's pointer finger
      * @param rP the raduis of the circle centered at the user's pointer finger
+     * @param canvas used for printing debug information.
      * @return the intercepts of the two circles. [x1, y1, x2, y2] if two intercepts exist, [x, y]
      *         if only one, and [] is none.
      */
-    private static float[] getCircleIntercepts(float centerX, float centerY, float rC, float pointerX, float pointerY, float rP) {
-        Double doubleHolder;
-        // x and y are the center of the small circle with the center of the large adjusted to (0, 0)
+    private static float[] getCircleIntercepts(float centerX, float centerY, float rC, float pointerX, float pointerY, float rP, Canvas canvas) {
+        // x and y are the center of the small circle with the center of the large adjusted to
+        // (0, 0).
         float x = pointerX - centerX;
         float y = pointerY - centerY;
-        doubleHolder = new Double(Math.atan(x / y));
-        float theta = doubleHolder.floatValue();
+        float theta = getTheta(x, y);
+        canvas.drawText(String.format("Theta: %f", theta), 32f, 32f, sDebugTextPaint);
 
         // dT is the total distance between the two centers
-        doubleHolder = Math.sqrt((double) (x * x + y * y));
-        float dT = doubleHolder.floatValue();
+        sDoubleHolder = Math.sqrt((double) (x * x + y * y));
+        float dT = sDoubleHolder.floatValue();
 
-        if (dT > rC + rP) {
+        if (dT > rC + rP + CIRCLE_INTERCEPT_THRESHOLD || rC > dT + rP) {
             // the circles do on intercept
             return new float[0];
         } else if (Math.abs(dT - rC - rP) < CIRCLE_INTERCEPT_THRESHOLD) {
             // the circles only have one intercept
-            int sign = y > 0 ? 1 : -1;
 
-            float result[] = new float[2];
-            doubleHolder = centerX + sign * rC * Math.sin(theta);
-            result[0] = doubleHolder.floatValue();
-            doubleHolder = centerY + sign * rC * Math.cos(theta);
-            result[1] = doubleHolder.floatValue();
+            float[] result = new float[2];
+            sDoubleHolder = centerX - rC * Math.sin(theta);
+            result[0] = sDoubleHolder.floatValue();
+            sDoubleHolder = centerY - rC * Math.cos(theta);
+            result[1] = sDoubleHolder.floatValue();
             return result;
         }
 
-        // TODO add math for 2 intercepts
-        return new float[0];
+        float[] result = new float[4];
+        float a = getLengthOfRadical(dT, rC, rP);
+        float dR = getDistanceToRadical(dT, rC, rP);
+        sDoubleHolder = centerX + dR * Math.sin(theta);
+        float xR = sDoubleHolder.floatValue();
+        sDoubleHolder = centerY + dR * Math.cos(theta);
+        float yR = sDoubleHolder.floatValue();
+
+        float halfA = a / 2f;
+        sDoubleHolder = halfA * Math.cos(theta);
+        float xA = sDoubleHolder.floatValue();
+        sDoubleHolder = halfA * Math.sin(theta);
+        float yA = sDoubleHolder.floatValue();
+
+        result[0] = xR + xA;
+        result[1] = yR - yA;
+        result[2] = xR - xA;
+        result[3] = yR + yA;
+        return result;
+    }
+
+    private static float getTheta(float x, float y) {
+        sDoubleHolder = Math.atan2((double) -y, (double) x) - Math.PI / 2f;
+        return sDoubleHolder.floatValue();
+    }
+
+    /**
+     * Math from http://mathworld.wolfram.com/Circle-CircleIntersection.html equation (9). This
+     * method returns the length of the radical line created by the intercepts of two circles (must
+     * have two intercepts) given the following:
+     * @param dT the distance between the two centers
+     * @param rC the radius of the large stationary circle
+     * @param rP the raduis of the circle centered at the user's pointer finger
+     * @return the length of the radical line created by the two intercepts of the circles
+     */
+    private static float getLengthOfRadical(float dT, float rC, float rP) {
+        sDoubleHolder = Math.sqrt(
+                (-dT + rP - rC) * (-dT - rP + rC) * (-dT + rP + rC) * (dT + rP + rC)) / dT;
+        return sDoubleHolder.floatValue();
+    }
+
+    /**
+     * Math from http://mathworld.wolfram.com/RadicalLine.html equation (3). This method returns the
+     * length along the line created between the two centers from rC to the radical line gicen the
+     * following:
+     * @param dT the distance between the two centers
+     * @param rC the radius of the large stationary circle
+     * @param rP the raduis of the circle centered at the user's pointer finger
+     * @return the distane from the center of the screen to the radical line.
+     */
+    private static float getDistanceToRadical(float dT, float rC, float rP) {
+        return -((dT * dT) + (rC * rC) - (rP * rP)) / (2 * dT);
     }
 
     @Override

@@ -21,5 +21,6 @@
     <dimen name="large_circle_radius">124dp</dimen>
     <dimen name="small_circle_radius">48dp</dimen>
     <dimen name="intercept_radius">6dp</dimen>
+    <dimen name="debug_text_size">16dp</dimen>
 
 </resources>
