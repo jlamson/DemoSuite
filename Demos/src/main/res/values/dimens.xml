@@ -17,7 +17,7 @@
     <dimen name="animation_circle_diameter">100dp</dimen>
 
     <!-- SECTION Touch Circle Demo-->
-    <dimen name="large_circle_stoke_width">8dp</dimen>
+    <dimen name="circle_stoke_width">4dp</dimen>
     <dimen name="large_circle_radius">124dp</dimen>
     <dimen name="small_circle_radius">48dp</dimen>
     <dimen name="intercept_radius">6dp</dimen>

@@ -13,7 +13,7 @@ import com.darkmoose117.demos.R;
  */
 public class CircleTouchView extends View {
 
-    private static final float CIRCLE_INTERCEPT_THRESHOLD = 16f;
+    private static final float CIRCLE_INTERCEPT_THRESHOLD = 4f;
 
     private static float sLargeCircleRadius;
     private static float sSmallCircleRadius;
@@ -42,7 +42,7 @@ public class CircleTouchView extends View {
         if (sCirclePaint == null) {
             sCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             sCirclePaint.setColor(getResources().getColor(R.color.purple));
-            sCirclePaint.setStrokeWidth(getResources().getDimension(R.dimen.large_circle_stoke_width));
+            sCirclePaint.setStrokeWidth(getResources().getDimension(R.dimen.circle_stoke_width));
             sCirclePaint.setStyle(Paint.Style.STROKE);
         }
 
@@ -100,7 +100,7 @@ public class CircleTouchView extends View {
      * @param rC the radius of the large stationary circle
      * @param pointerX  the X of the circle centered at the user's pointer finger
      * @param pointerY  the Y of the circle centered at the user's pointer finger
-     * @param rP the raduis of the circle centered at the user's pointer finger
+     * @param rP the radius of the circle centered at the user's pointer finger
      * @param canvas used for printing debug information.
      * @return the intercepts of the two circles. [x1, y1, x2, y2] if two intercepts exist, [x, y]
      *         if only one, and [] is none.
@@ -111,11 +111,9 @@ public class CircleTouchView extends View {
         float x = pointerX - centerX;
         float y = pointerY - centerY;
         float theta = getTheta(x, y);
-        canvas.drawText(String.format("Theta: %f", theta), 32f, 32f, sDebugTextPaint);
 
         // dT is the total distance between the two centers
-        sDoubleHolder = Math.sqrt((double) (x * x + y * y));
-        float dT = sDoubleHolder.floatValue();
+        float dT = toFloat(Math.sqrt((double) (x * x + y * y)));
 
         if (dT > rC + rP + CIRCLE_INTERCEPT_THRESHOLD || rC > dT + rP) {
             // the circles do on intercept
@@ -124,26 +122,20 @@ public class CircleTouchView extends View {
             // the circles only have one intercept
 
             float[] result = new float[2];
-            sDoubleHolder = centerX - rC * Math.sin(theta);
-            result[0] = sDoubleHolder.floatValue();
-            sDoubleHolder = centerY - rC * Math.cos(theta);
-            result[1] = sDoubleHolder.floatValue();
+            result[0] = toFloat(centerX - rC * Math.sin(theta));
+            result[1] = toFloat(centerY - rC * Math.cos(theta));
             return result;
         }
 
         float[] result = new float[4];
         float a = getLengthOfRadical(dT, rC, rP);
         float dR = getDistanceToRadical(dT, rC, rP);
-        sDoubleHolder = centerX + dR * Math.sin(theta);
-        float xR = sDoubleHolder.floatValue();
-        sDoubleHolder = centerY + dR * Math.cos(theta);
-        float yR = sDoubleHolder.floatValue();
+        float xR = toFloat(centerX + dR * Math.sin(theta));
+        float yR = toFloat(centerY + dR * Math.cos(theta));
 
         float halfA = a / 2f;
-        sDoubleHolder = halfA * Math.cos(theta);
-        float xA = sDoubleHolder.floatValue();
-        sDoubleHolder = halfA * Math.sin(theta);
-        float yA = sDoubleHolder.floatValue();
+        float xA = toFloat(halfA * Math.cos(theta));
+        float yA = toFloat(halfA * Math.sin(theta));
 
         result[0] = xR + xA;
         result[1] = yR - yA;
@@ -153,8 +145,7 @@ public class CircleTouchView extends View {
     }
 
     private static float getTheta(float x, float y) {
-        sDoubleHolder = Math.atan2((double) -y, (double) x) - Math.PI / 2f;
-        return sDoubleHolder.floatValue();
+        return toFloat(Math.atan2((double) -y, (double) x) - Math.PI / 2f);
     }
 
     /**
@@ -163,13 +154,12 @@ public class CircleTouchView extends View {
      * have two intercepts) given the following:
      * @param dT the distance between the two centers
      * @param rC the radius of the large stationary circle
-     * @param rP the raduis of the circle centered at the user's pointer finger
+     * @param rP the radius of the circle centered at the user's pointer finger
      * @return the length of the radical line created by the two intercepts of the circles
      */
     private static float getLengthOfRadical(float dT, float rC, float rP) {
-        sDoubleHolder = Math.sqrt(
-                (-dT + rP - rC) * (-dT - rP + rC) * (-dT + rP + rC) * (dT + rP + rC)) / dT;
-        return sDoubleHolder.floatValue();
+        return toFloat(Math.sqrt(
+                (-dT + rP - rC) * (-dT - rP + rC) * (-dT + rP + rC) * (dT + rP + rC)) / dT);
     }
 
     /**
@@ -178,7 +168,7 @@ public class CircleTouchView extends View {
      * following:
      * @param dT the distance between the two centers
      * @param rC the radius of the large stationary circle
-     * @param rP the raduis of the circle centered at the user's pointer finger
+     * @param rP the radius of the circle centered at the user's pointer finger
      * @return the distane from the center of the screen to the radical line.
      */
     private static float getDistanceToRadical(float dT, float rC, float rP) {
@@ -197,5 +187,9 @@ public class CircleTouchView extends View {
 
         mIsPointerDown = false;
         return super.onTouchEvent(event);
+    }
+
+    private static float toFloat(Double lDouble) {
+        return lDouble.floatValue();
     }
 }
