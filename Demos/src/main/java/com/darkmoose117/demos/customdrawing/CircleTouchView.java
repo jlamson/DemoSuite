@@ -14,13 +14,16 @@ import com.darkmoose117.demos.R;
 public class CircleTouchView extends View {
 
     private static final float CIRCLE_INTERCEPT_THRESHOLD = 4f;
+    public static final float THETA_OFFSET = toFloat(Math.PI / 16);
 
     private static float sLargeCircleRadius;
     private static float sSmallCircleRadius;
-    private static float sInterceptRadius;
+    private static float sPointRadius;
+    private static int sInterceptColor;
+    private static int sArcPointColor;
 
     private static Paint sCirclePaint;
-    private static Paint sInterceptPaint;
+    private static Paint sPointPaint;
     private static TextPaint sDebugTextPaint;
     private RectF mRectF = new RectF();
 
@@ -46,10 +49,9 @@ public class CircleTouchView extends View {
             sCirclePaint.setStyle(Paint.Style.STROKE);
         }
 
-        if (sInterceptPaint == null) {
-            sInterceptPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            sInterceptPaint.setColor(getResources().getColor(R.color.green));
-            sInterceptPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        if (sPointPaint == null) {
+            sPointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sPointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         }
 
         if (sDebugTextPaint == null) {
@@ -59,7 +61,10 @@ public class CircleTouchView extends View {
 
         sLargeCircleRadius = getResources().getDimension(R.dimen.large_circle_radius);
         sSmallCircleRadius = getResources().getDimension(R.dimen.small_circle_radius);
-        sInterceptRadius = getResources().getDimension(R.dimen.intercept_radius);
+        sPointRadius = getResources().getDimension(R.dimen.intercept_radius);
+
+        sInterceptColor = getResources().getColor(R.color.green);
+        sArcPointColor = getResources().getColor(R.color.dark_yellow);
     }
 
     @Override
@@ -73,14 +78,24 @@ public class CircleTouchView extends View {
         canvas.drawArc(mRectF, 0, 360, false, sCirclePaint);
 
         if (mIsPointerDown) {
+            float[] intercepts = getCircleIntercepts(centerX, centerY, sLargeCircleRadius,
+                    mPointerX, mPointerY, sSmallCircleRadius, canvas);
+            float[] arcPoints = getCircleArcPoints(centerX, centerY, sLargeCircleRadius,
+                    mPointerX, mPointerY, sSmallCircleRadius, intercepts);
+
             setRectForCircle(mPointerX, mPointerY, sSmallCircleRadius);
             canvas.drawArc(mRectF, 0, 360, false, sCirclePaint);
 
-            float[] intercepts = getCircleIntercepts(centerX, centerY, sLargeCircleRadius,
-                    mPointerX, mPointerY, sSmallCircleRadius, canvas);
+            if (intercepts.length >= 4) drawPoint(canvas, intercepts[2], intercepts[3], 2, sInterceptColor);
+            if (intercepts.length >= 2) drawPoint(canvas, intercepts[0], intercepts[1], 1, sInterceptColor);
 
-            if (intercepts.length >= 4) drawPoint(canvas, intercepts[2], intercepts[3]);
-            if (intercepts.length >= 2) drawPoint(canvas, intercepts[0], intercepts[1]);
+            for (int i = 0; i < 4; i++) {
+                if (arcPoints.length >= 2 * (i + 1)) {
+                    drawPoint(canvas, arcPoints[2 * i], arcPoints[2 * i + 1], i, sArcPointColor);
+                }
+            }
+
+
         }
     }
 
@@ -88,8 +103,10 @@ public class CircleTouchView extends View {
         mRectF.set(cX - r, cY - r, cX + r, cY + r);
     }
 
-    private void drawPoint(Canvas canvas, float x, float y) {
-        canvas.drawCircle(x, y, sInterceptRadius, sInterceptPaint);
+    private void drawPoint(Canvas canvas, float x, float y, int which, int color) {
+        sPointPaint.setColor(color);
+        canvas.drawCircle(x, y, sPointRadius, sPointPaint);
+        canvas.drawText(String.valueOf(which), x, y, sDebugTextPaint);
     }
 
     private static Double sDoubleHolder = new Double(0.0);
@@ -111,6 +128,7 @@ public class CircleTouchView extends View {
         float x = pointerX - centerX;
         float y = pointerY - centerY;
         float theta = getTheta(x, y);
+        canvas.drawText(String.format("Theta: %f", theta), 32f, 32f, sDebugTextPaint);
 
         // dT is the total distance between the two centers
         float dT = toFloat(Math.sqrt((double) (x * x + y * y)));
@@ -173,6 +191,29 @@ public class CircleTouchView extends View {
      */
     private static float getDistanceToRadical(float dT, float rC, float rP) {
         return -((dT * dT) + (rC * rC) - (rP * rP)) / (2 * dT);
+    }
+
+    private static float[] getCircleArcPoints(float centerX, float centerY, float rC, float pointerX, float pointerY, float rP, float[] intercepts) {
+        if (intercepts.length < 4) return new float[0];
+
+        float[] result = new float[8];
+        for (int i = 0; i < 2; i++) {
+            // intercepts[0 - 1] are the more clockwise intercept.
+            int plusOrMinus = i == 0 ? -1 : 1;
+
+            float iX = intercepts[2 * i];
+            float iY = intercepts[2 * i + 1];
+
+            float theta = getTheta(iX - centerX, iY - centerY) + plusOrMinus * THETA_OFFSET;
+            result[4 * i + 0] = centerX - toFloat(rC * Math.sin(theta));
+            result[4 * i + 1] = centerY - toFloat(rC * Math.cos(theta));
+
+            theta = getTheta(iX - pointerX, iY - pointerY) - plusOrMinus * THETA_OFFSET;
+            result[4 * i + 2] = pointerX - toFloat(rP * Math.sin(theta));
+            result[4 * i + 3] = pointerY - toFloat(rP * Math.cos(theta));
+        }
+
+        return result;
     }
 
     @Override
