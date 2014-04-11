@@ -13,4 +13,8 @@
     <dimen name="notification_margin">16dp</dimen>
     <dimen name="animation_circle_diameter">100dp</dimen>
 
+    <dimen name="large_circle_stoke_width">8dp</dimen>
+    <dimen name="large_circle_radius">124dp</dimen>
+    <dimen name="small_circle_radius">48dp</dimen>
+
 </resources>

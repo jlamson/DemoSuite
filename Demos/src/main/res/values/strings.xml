@@ -3,7 +3,6 @@
 
     <string name="app_name">Demo Suite</string>
     <string name="title_demo_detail">Demo Detail</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -24,11 +23,10 @@
     <string name="notification_stacked_button">Show a stacked notification</string>
     <string name="notification_button_label">Click me yo\'</string>
 
-    <!-- SECTION Animation Demo-->
+    <!-- SECTION Animation Demo -->
 
     <string name="enter_circle_prompt">Press anywhere to bring up the circle</string>
     <string name="exit_circle_prompt">Press anywhere to dismiss the circle</string>
-
 
     <!-- SECTION String Arrays -->
 
@@ -37,14 +35,12 @@
         <item>No</item>
         <item>Maybe</item>
     </string-array>
-    
     <string-array name="multi_page_notification_text">
         <item>Step 1: Cut a hole in the box.</item>
         <item>Step 2: Put yo\' junk in that box.</item>
         <item>Step 3: Make \'em open the box, because that\'s the way we do it.</item>
         <item>Christmas? Dick in a box. Hanukkah? Dick in a box. Kwanzaa? A Dick in a box. Every single holiday: dick in a box. Over at your parents\' house: a dick in a box. Mid-day at the grocery store: a dick in a box. Coding some Android… a dick in a box</item>
     </string-array>
-
     <string-array name="stacked_notification_text">
         <item>Hey bro! I have a great new gift idea!</item>
         <item>Got a box?</item>
@@ -52,5 +48,7 @@
         <item>Your Mom says hi.</item>
         <item>Dude, was it just me or was that Gaga?</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
